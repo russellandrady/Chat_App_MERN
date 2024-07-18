@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import "../styles/style_for_chat.css";
 import { chatGotAll, chatGotAllFailure } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,12 +6,40 @@ import Conversation from '../components/Conversation';
 import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChatBox from '../components/ChatBox';
+import { io } from "socket.io-client";
 
 export default function Chat() {
     const [currentChat, setCurrentChat] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [sendMessage, setSendMessage] = useState(null);
+    const [receivedMessage, setReceivedMessage] = useState(null);
     const { currentUser, chats, loading } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     console.log(chats);
+
+    const socket = useRef();
+
+    useEffect(() => {
+      socket.current = io("http://localhost:8800");
+      socket.current.emit("new-user-add", currentUser._id);
+      socket.current.on("get-users", (users) => {
+        setOnlineUsers(users);
+      });
+    }, [currentUser]);
+
+    //sending message to socket server
+
+    useEffect(() => {
+        if (sendMessage!==null) {
+          socket.current.emit("send-message", sendMessage);}
+      }, [sendMessage]);
+
+    //receiving message from socket server
+    useEffect(() => {
+        socket.current.on("recieve-message", (data) => {
+          setReceivedMessage(data);
+        });
+      }, []);
 
     const fetchData = async () => {
         try {
@@ -69,8 +97,8 @@ export default function Chat() {
         </div>
         <ChatBox
           chat={currentChat}
-        //   setSendMessage={setSendMessage}
-        //   receivedMessage={receivedMessage}
+        setSendMessage={setSendMessage}
+          receivedMessage={receivedMessage}
         />
       </div>
     </div>
