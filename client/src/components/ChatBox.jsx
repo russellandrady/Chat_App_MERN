@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdFace6 } from "react-icons/md";
 import "../styles/style_for_chat.css";
@@ -10,17 +10,19 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
   const { currentUser } = useSelector((state) => state.user);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
+  const scroll = useRef();
+
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
   };
 
-  useEffect(()=> {
-    console.log("Message Arrived: ", receivedMessage)
+  useEffect(() => {
+    console.log("Message Arrived: ", receivedMessage);
     if (receivedMessage !== null && receivedMessage.chatId === chat._id) {
       setMessages([...messages, receivedMessage]);
     }
-  
-  },[receivedMessage]);
+  }, [receivedMessage]);
 
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== currentUser._id);
@@ -63,18 +65,18 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
     }
   }, [chat]);
 
-    const handleSend = async (e) => {
-        e.preventDefault();
+  const handleSend = async (e) => {
+    e.preventDefault();
     try {
       const message = {
-        senderId: currentUser,
+        senderId: currentUser._id,
         text: newMessage,
         chatId: chat._id,
       };
       //send message to socket server
-    const receiverId = chat.members.find((id) => id !== currentUser);
-    setSendMessage({...message, receiverId});
-      const {response} = await fetch(`/api/message`, {
+      const receiverId = chat.members.find((id) => id !== currentUser._id);
+      setSendMessage({ ...message, receiverId });
+      const { response } = await fetch(`/api/message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,14 +84,20 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
         body: JSON.stringify(message),
       });
 
-        setMessages([...messages, message]);
-        setNewMessage("");
-      
+      setMessages([...messages, message]);
+      console.log(message);
+      setNewMessage("");
     } catch (error) {
       console.log(error);
     }
-    
-};
+  };
+  
+  useEffect(() => {
+    if (scroll.current) {
+      scroll.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+  
 
   return (
     <div>
@@ -101,12 +109,7 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
                 <div className="follower conversation">
                   <div>
                     {/* {online && <div className="online-dot"></div>} */}
-                    {/* <img
-            src={userData?.profilePicture? process.env.REACT_APP_PUBLIC_FOLDER + userData.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfile.png"}
-            alt="Profile"
-            className="followerImage"
-            style={{ width: "50px", height: "50px" }}
-          /> */}
+                    {/*  */}
                     <MdFace6 />
 
                     <div className="name" style={{ fontSize: "0.8rem" }}>
@@ -121,9 +124,12 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
             <div className="chat-body">
               {(Array.isArray(messages) ? messages : []).map((message) => (
                 <div
+                  ref={scroll}
                   key={message._id}
                   className={
-                    message.senderId === currentUser ? "message own" : "message"
+                    message.senderId === currentUser._id
+                      ? "message own"
+                      : "message"
                   }
                 >
                   <span>{message.text}</span>
@@ -134,7 +140,9 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
             <div className="chat-sender">
               <div>+</div>
               <InputEmoji value={newMessage} onChange={handleChange} />
-              <button className="send-button button" onClick={handleSend}>Send</button>
+              <button className="send-button button" onClick={handleSend}>
+                Send
+              </button>
             </div>
           </div>
         ) : (

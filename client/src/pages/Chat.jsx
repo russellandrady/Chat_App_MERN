@@ -59,11 +59,16 @@ export default function Chat() {
       };
 
     useEffect(() => {
-        if ((Array.isArray(chats))) {
+
           fetchData();
           console.log("fetched");
-        }
+        
       }, []);
+      const checkOnlineStatus = (chat) => {
+        const chatMember = chat.members.find((member) => member !== currentUser._id);
+        const online = onlineUsers.find((user) => user.userId === chatMember);
+        return online ? true : false;
+      };
   return (
     <div className="Chat">
       {/* Left Side */}
@@ -81,7 +86,7 @@ export default function Chat() {
               >
                 <Conversation
                   data={chat}
-                //   online={checkOnlineStatus(chat)}
+                  online={checkOnlineStatus(chat)}
                 />
               </div>
             ))}

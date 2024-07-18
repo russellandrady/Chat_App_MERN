@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MdFace6 } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-const Conversation = ({data}) => {
+const Conversation = ({data, online}) => {
 
     const [userData, setUserData] = useState(null);
     const { currentUser} = useSelector((state) => state.user);
@@ -32,7 +32,7 @@ const Conversation = ({data}) => {
     <>
       <div className="follower conversation">
         <div>
-          {/* {online && <div className="online-dot"></div>} */}
+          {online && <div className="online-dot"></div>}
           {/* <img
             src={userData?.profilePicture? process.env.REACT_APP_PUBLIC_FOLDER + userData.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfile.png"}
             alt="Profile"
