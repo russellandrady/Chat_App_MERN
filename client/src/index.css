@@ -1,0 +1,26 @@
+/* RotatingLoadingIcon.css */
+
+.loading-icon {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* Ensure it's above other content */
+  }
+  
+  .icon {
+    font-size: 36px; /* Adjust size as needed */
+    color: #007bff; /* Adjust color as needed */
+    animation: rotate 1s linear infinite; /* Apply rotation animation */
+  }
+  
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
