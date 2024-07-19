@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentUser: null,
   chats: [],
+  users:[],
   loading: false,
   error: false,
 };
@@ -46,9 +47,16 @@ const userSlice = createSlice({
       chatGotAllFailure(state, action) {
         state.error = action.payload;
       },
+      usersGotAll(state, action) {
+        state.users = action.payload;
+      },
+      usersGotAllFailure(state, action) {
+        state.error = action.payload;
+      },
       signOut(state) {
         state.currentUser = null;
         state.chats = [];
+        state.users = [];
         state.loading = false;
         state.error = false;
       },
@@ -63,6 +71,8 @@ const userSlice = createSlice({
     signUpFailure,
     chatGotAll,
     chatGotAllFailure,
+    usersGotAll,
+    usersGotAllFailure,
     signOut
   } = userSlice.actions;
   export default userSlice.reducer;
