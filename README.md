@@ -28,7 +28,7 @@
     JWT_SECRET=<Your JWT Secret>
     ```
 
-    **Client directory `.env` file (for sign in with Google):**
+    **Client directory `.env` file (Only need for sign in with Google):**
     ```plaintext
     VITE_FIREBASE_API_KEY=<Your Firebase API Key>
     ```
