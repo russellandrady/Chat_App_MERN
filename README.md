@@ -68,6 +68,7 @@ The Chat App is structured as a MERN stack application:
 - **Backend:** Developed with Express and Node.js, located in the `api` directory. It manages authentication, API endpoints, and business logic.
 - **Database:** Uses MongoDB for data storage, accessed via Mongoose. The connection string and JWT secret are stored in environment variables.
 - **Socket Server:** Uses Socket.io for real-time communication, located in the `socket` directory.
+- **State Management:** Uses Redux Toolkit for chat persistence.
 
 ## Any Assumptions Made
 - Users have Node.js and npm installed on their machines.
