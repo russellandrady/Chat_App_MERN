@@ -28,7 +28,7 @@
     JWT_SECRET=<Your JWT Secret>
     ```
 
-    **Client directory `.env` file:(for sign in with Google)**
+    **Client directory `.env` file (for sign in with Google):**
     ```plaintext
     VITE_FIREBASE_API_KEY=<Your Firebase API Key>
     ```
@@ -61,5 +61,21 @@
 
 6. **Using the Application:**
     - You can sign up from different accounts and log in to use the chat app.
+
+## Brief Explanation of the Application’s Structure
+The Chat App is structured as a MERN stack application:
+- **Frontend:** Built with React, located in the `client` directory. It handles the user interface and communicates with the backend via API calls.
+- **Backend:** Developed with Express and Node.js, located in the `api` directory. It manages authentication, API endpoints, and business logic.
+- **Database:** Uses MongoDB for data storage, accessed via Mongoose. The connection string and JWT secret are stored in environment variables.
+- **Socket Server:** Uses Socket.io for real-time communication, located in the `socket` directory.
+
+## Any Assumptions Made
+- Users have Node.js and npm installed on their machines.
+- Users know how to setup MongoDB database and obtain the connection string.
+
+## Limitations
+- The application is designed for development purposes and may not be optimized for production.
+- Performance may degrade with a large number of concurrent users.
+- It might only work on certain browsers.
 
 Enjoy the application!
