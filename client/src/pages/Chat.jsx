@@ -3,6 +3,7 @@ import "../styles/style_for_chat.css";
 import {
   chatGotAll,
   chatGotAllFailure,
+  signOut,
   usersGotAll,
   usersGotAllFailure,
 } from "../redux/user/userSlice";
@@ -12,6 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChatBox from "../components/ChatBox";
 import { io } from "socket.io-client";
+import { Navigate } from "react-router-dom";
 
 export default function Chat() {
   const [currentChat, setCurrentChat] = useState(null);
@@ -23,7 +25,6 @@ export default function Chat() {
     (state) => state.user
   );
   const dispatch = useDispatch();
-  console.log(chats);
 
   const socket = useRef();
 
@@ -45,10 +46,10 @@ export default function Chat() {
   }, [sendMessage]);
 
   //receiving message from socket server
+
   useEffect(() => {
     socket.current.on("recieve-message", (data) => {
       setReceivedMessage(data);
-
     });
   }, []);
 
@@ -67,13 +68,13 @@ export default function Chat() {
       toast.error(error);
     }
   };
+
   const fetchusers = async () => {
     try {
       const response = await fetch(`/api/user/all-users/${currentUser._id}`);
       if (response.ok) {
         const data = await response.json();
         dispatch(usersGotAll(data));
-        console.log(data);
       } else {
         dispatch(usersGotAllFailure("Failed to fetch data"));
         toast.error("Failed to fetch data");
@@ -88,13 +89,16 @@ export default function Chat() {
     fetchData();
     fetchusers();
   }, []);
+
   useEffect(() => {
-    const chatMemberIds = new Set(chats.flatMap((chat) => chat.members));
+    const chatMemberIds = new Set(chats?.flatMap((chat) => chat.members));
     const usersNotInChats = users.filter(
       (user) => !chatMemberIds.has(user._id) && user._id !== currentUser._id
     );
+
     setAvailableUsers(usersNotInChats);
   }, [users, chats, currentUser]);
+
   const checkOnlineStatus = (chat) => {
     const chatMember = chat.members.find(
       (member) => member !== currentUser._id
@@ -102,6 +106,7 @@ export default function Chat() {
     const online = onlineUsers.find((user) => user.userId === chatMember);
     return online ? true : false;
   };
+
   const startChatWithUser = async (userId) => {
     try {
       const response = await fetch(`/api/chat/`, {
@@ -121,6 +126,17 @@ export default function Chat() {
       toast.error(error);
     }
   };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/signout");
+      dispatch(signOut());
+      Navigate("/");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   return (
     <div className="Chat">
       {/* Left Side */}
@@ -151,7 +167,13 @@ export default function Chat() {
                 </button>
               ))}
             </ul>
+            <div className="sign-out-link">
+        <p onClick={handleSignOut}>
+          Signout
+        </p>
+      </div>
           </div>
+          
         </div>
       </div>
 

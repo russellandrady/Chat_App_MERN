@@ -7,6 +7,7 @@ const Conversation = ({data, online}) => {
 
     const [userData, setUserData] = useState(null);
     const { currentUser} = useSelector((state) => state.user);
+
     useEffect(() => {
         const userId = data.members.find((id)=>id!==currentUser._id);
         console.log(userId);
@@ -18,10 +19,10 @@ const Conversation = ({data, online}) => {
                     setUserData(data);
                     console.log(userData);
                 } else {
-                    console.log("Failed to get other user data");
+                    toast.error("Failed to get other user data");
                 }
             } catch (error) {
-                console.log(error);
+              toast.error(error);
             }
         };
         getUser();
@@ -34,10 +35,8 @@ const Conversation = ({data, online}) => {
         <div>
           {online && <div className="online-dot"></div>}
           <MdFace6 />
-
           <div className="name" style={{fontSize: '0.8rem'}}>
             <span>{userData?.username}</span>
-            {/* <span style={{color: online?"#51e200":""}}>{online? "Online" : "Offline"}</span> */}
           </div>
         </div>
       </div>
