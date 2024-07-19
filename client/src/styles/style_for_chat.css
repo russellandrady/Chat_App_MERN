@@ -63,7 +63,7 @@ body {
 }
 
 .online-dot {
-  background-color: greenyellow;
+  background-color: rgb(188, 232, 122);
   border-radius: 50%;
   position: absolute;
   left: 2rem;
@@ -127,7 +127,7 @@ body {
 }
 
 .message.own {
-  background-color: #4e8cff;
+  background-color: #2a56a7;
   color: #ffffff;
   margin-left: auto; /* This pushes the .message.own to the right */
   border-radius: 20px;
@@ -152,7 +152,7 @@ body {
 }
 
 .send-button:hover {
-  background-color: #3578e5;
+  background-color: #2a56a7;
 }
 
 
@@ -189,12 +189,27 @@ body {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #007bff;
+  background-color: #4e8cff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+.User-selection button:hover {
+  background-color: #2a56a7;
+
+}
+.sign-out-link{
+  text-align: center;
+  font-size: 15px;
+  margin-top: 20px;
+  color: #000;
+  font-weight: 600;
+}
+.sign-out-link:hover{
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 

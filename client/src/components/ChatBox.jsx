@@ -4,6 +4,7 @@ import { MdFace6 } from "react-icons/md";
 import "../styles/style_for_chat.css";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
+import { toast } from "react-toastify";
 
 export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
   const [userData, setUserData] = useState(null);
@@ -35,10 +36,10 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
           setUserData(data);
           console.log(userData);
         } else {
-          console.log("Failed to get other user data");
+          toast.error("Failed to get other user data");
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error);
       }
     };
     if (chat !== null) {
@@ -54,10 +55,10 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
           setMessages(data);
           console.log(data);
         } else {
-          console.log("Failed to get messages");
+          toast.error("Failed to get messages");
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error);
       }
     };
     if (chat !== null) {
@@ -85,10 +86,10 @@ export default function ChatBox({ chat, setSendMessage, receivedMessage }) {
       });
 
       setMessages([...messages, message]);
-      console.log(message);
+      toast.error(message);
       setNewMessage("");
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   };
   
